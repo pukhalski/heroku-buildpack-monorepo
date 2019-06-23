@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
-indent() {
-    sed -u 's/^/      /'
-}
+#indent() {
+#    sed -u 's/^/      /'
+#}
 
 BUILD_DIR="$1"
 CACHE_DIR="$2"
 ENV_DIR="$3"
 STAGE="$(mktemp -d)"
+
+eval "${ENV_DIR}/APP_PRE_BUILDPACK"
 
 if [ ! -f "${ENV_DIR}/APP_BASE" ]; then
     echo "APP_BASE was not set. Aborting" | indent
@@ -24,6 +26,8 @@ if [ $? -ne 0 ]; then
     echo "FAILED to copy directory into place" | indent
     exit 1
 fi
+
+eval "${ENV_DIR}/APP_POST_BUILDPACK"
 
 echo "Copied ${APP_BASE} to root of app successfully" | indent
 
