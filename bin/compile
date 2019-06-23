@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-#indent() {
-#    sed -u 's/^/      /'
-#}
+indent() {
+    sed -u 's/^/      /'
+}
 
 BUILD_DIR="$1"
 CACHE_DIR="$2"
