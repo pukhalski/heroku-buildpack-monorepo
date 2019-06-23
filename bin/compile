@@ -8,7 +8,17 @@ CACHE_DIR="$2"
 ENV_DIR="$3"
 STAGE="$(mktemp -d)"
 
-eval $APP_PRE_BUILDPACK
+if [ -f $ENV_DIR/APP_PRE_BUILDPACK ]; then
+	APP_PRE_BUILDPACK=$(cat "$ENV_DIR/APP_PRE_BUILDPACK")
+	cd $BUILD_DIR
+	echo "-----> \"APP_PRE_BUILDPACK\" environment variable found"
+	echo "Executing \"APP_PRE_BUILDPACK\" command..."
+	eval "$APP_PRE_BUILDPACK"
+    cd ..
+else
+	echo "-----> \"APP_PRE_BUILDPACK\" environment variable not found"
+	echo "Skipped!"
+fi
 
 if [ ! -f "${ENV_DIR}/APP_BASE" ]; then
     echo "APP_BASE was not set. Aborting" | indent
@@ -27,7 +37,17 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-eval $APP_POST_BUILDPACK
+if [ -f $ENV_DIR/APP_POST_BUILDPACK ]; then
+	APP_POST_BUILDPACK=$(cat "$ENV_DIR/APP_POST_BUILDPACK")
+	cd $BUILD_DIR
+	echo "-----> \"APP_POST_BUILDPACK\" environment variable found"
+	echo "Executing \"APP_POST_BUILDPACK\" command..."
+	eval "$APP_POST_BUILDPACK"
+    cd ..
+else
+	echo "-----> \"APP_POST_BUILDPACK\" environment variable not found"
+	echo "Skipped!"
+fi
 
 echo "Copied ${APP_BASE} to root of app successfully" | indent
 
