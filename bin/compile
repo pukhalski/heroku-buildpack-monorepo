@@ -8,7 +8,7 @@ CACHE_DIR="$2"
 ENV_DIR="$3"
 STAGE="$(mktemp -d)"
 
-eval "${ENV_DIR}/APP_PRE_BUILDPACK"
+eval "${APP_PRE_BUILDPACK}"
 
 if [ ! -f "${ENV_DIR}/APP_BASE" ]; then
     echo "APP_BASE was not set. Aborting" | indent
@@ -27,7 +27,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-eval "${ENV_DIR}/APP_POST_BUILDPACK"
+eval "${APP_POST_BUILDPACK}"
 
 echo "Copied ${APP_BASE} to root of app successfully" | indent
 
